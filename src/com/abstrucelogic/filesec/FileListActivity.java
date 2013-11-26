@@ -36,11 +36,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/**
- * 
- * @author MANISH
- *
- */
 public class FileListActivity extends Activity implements CryptoProgressListener {
 
 	public final static String FILE_PATH = "file_path";
@@ -62,7 +57,7 @@ public class FileListActivity extends Activity implements CryptoProgressListener
 		// Keeping the Orientation PORTRAIT
 		setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); 
 		//remove the title bar
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		//requestWindowFeature(Window.FEATURE_NO_TITLE);
 		//setting UI from XML 
 		setContentView(R.layout.file_picker_activity);
 
@@ -169,7 +164,20 @@ public class FileListActivity extends Activity implements CryptoProgressListener
 		alertDialog.show();
 	}
 
-	public void buttonOnClick(File nfile, CryptoProcessMode processMode){
+	public void buttonOnClick(final File nfile, final CryptoProcessMode processMode){
+		if(processMode == CryptoProcessMode.SYNC) {
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					execProcess(nfile, processMode);
+				}
+			}).start();
+		} else {
+			execProcess(nfile, processMode);
+		}
+	}
+
+	public void execProcess(File nfile, CryptoProcessMode processMode) {
 		CryptoManager cryptoManager = CryptoManager.getInstance();
 		CryptoConf conf= new CryptoConf();
 
@@ -188,7 +196,7 @@ public class FileListActivity extends Activity implements CryptoProgressListener
 		cryptoManager.process(conf,FileListActivity.this);
 
 	}
-
+	
 	@Override
 	protected void onResume() {
 		refList();

@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         
-        <service android:name="com.abstrucelogic.crypto.service.CryptoService"/>
+        <service android:name="com.abstrucelogic.crypto.mode.service.CryptoService"/>
         
     </application>
 
